@@ -1,9 +1,8 @@
-# ros2-teaching-ws
-A template repository for teaching robotics with ROS2
+# RBT1001
+Introduction to Robotics workshops materials
 
-## Use case
-
-You can use this repository to start developing your ROS2 modules. It provides a preconfigured [Development Container](https://containers.dev/) with ROS2 installed, and a VNC based light Desktop integrated directly.
+## Syllabus & weekly instructions
+Go to the [wiki page](https://github.com/francescodelduchetto/RBT1001/wiki)
 
 ## Usage
 
