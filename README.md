@@ -1,5 +1,4 @@
-# RBT1001
-**Introduction to Robotics** workshops materials
+# Introduction to Robotics (RBT1001) workshops materials
 
 ## Syllabus & weekly instructions
 Go to the [wiki page](https://github.com/francescodelduchetto/RBT1001/wiki)
