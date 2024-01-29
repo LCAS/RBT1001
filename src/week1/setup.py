@@ -15,13 +15,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Marc Hanheide',
-    maintainer_email='marc@hanheide.net',
+    maintainer='Francesco Del Duchetto',
+    maintainer_email='fdelduchetto@lincoln.ac.uk',
     description='CMP3103 teaching and assessment relevant package',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'turtles_controller = week1.turtles_controller:main',
         ],
     },
 )
