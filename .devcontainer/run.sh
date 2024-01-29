@@ -29,5 +29,6 @@ cd /home/lcas/ws
 colcon build 
 add_source_bashrc "/opt/ros/lcas/install/setup.bash"
 add_source_bashrc "/home/lcas/ws/install/setup.bash"
+echo "function rebuild { cd /home/lcas/ws; colcon build; cd -; }" >> ~/.bashrc
 source /home/lcas/ws/install/setup.bash
 
