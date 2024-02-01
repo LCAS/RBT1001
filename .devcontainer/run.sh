@@ -9,6 +9,8 @@ add_source_bashrc () {
 set -e
 
 export WORKSPACE="`pwd`"
+sudo chown -R lcas /home/lcas/ws
+sudo chown -R lcas /workspaces
 
 source /opt/ros/lcas/install/setup.bash
 sudo apt update
