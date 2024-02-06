@@ -11,7 +11,9 @@ setup(
     data_files=[
         ('share/' + package_name, ['package.xml']),
         (path.join('share', package_name, 'launch'), glob(path.join('launch', '*launch.[pxy][yma]*'))),
-        (path.join('share', package_name, 'description', 'urdf'), glob(path.join('description', 'urdf', '*.xacro')))
+        (path.join('share', package_name, 'description', 'urdf'), glob(path.join('description', 'urdf', '*.xacro'))),
+        (path.join('share', package_name, 'description', 'meshes', 'visual'), glob(path.join('description', 'meshes', 'visual', '*'))),
+        (path.join('share', package_name, 'config'), glob(path.join('config', '*.rviz')))
     ],
     install_requires=['setuptools'],
     zip_safe=True,

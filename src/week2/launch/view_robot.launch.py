@@ -19,6 +19,7 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -64,7 +65,7 @@ def generate_launch_description():
     prefix = LaunchConfiguration("prefix")
 
     # Get URDF via xacro
-    robot_description_content = Command(
+    robot_description_content = ParameterValue(Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
@@ -76,11 +77,16 @@ def generate_launch_description():
             "prefix:=",
             prefix,
         ]
-    )
+    ), value_type=str)
+    # robot_description_content = ParameterValue(Command(
+    #     [
+    #         'xacro ',os.path.join(turtlebot2_description_package,'robots/kobuki_conveyor.urdf.xacro')]), value_type=str)
+    #     ]
+    # )
     robot_description = {"robot_description": robot_description_content}
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "rrbot/rviz", "rrbot.rviz"]
+        [FindPackageShare("week2"), "config", "exercise_viz.rviz"]
     )
 
     joint_state_publisher_node = Node(
