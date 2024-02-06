@@ -1,6 +1,5 @@
 <robot name="fanuc_cr7ia"  xmlns:xacro="http://wiki.ros.org/xacro">
-
-    <!-- links: main serial chain -->
+    <link name="world"/>
     <link name="base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -11,12 +10,6 @@
           <color rgba="0.34 0.35 0.36 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/base_link.stl"/>
-        </geometry>
-      </collision> -->
     </link>
     <link name="link_1">
       <visual>
@@ -28,12 +21,6 @@
           <color rgba="${  0/255} ${155/255} ${ 70/255} 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/link_1.stl"/>
-        </geometry>
-      </collision> -->
     </link>
     <link name="link_2">
       <visual>
@@ -45,12 +32,6 @@
           <color rgba=" ${  0/255} ${155/255} ${ 70/255} 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/link_2.stl"/>
-        </geometry>
-      </collision> -->
     </link>
     <link name="link_3">
       <visual>
@@ -62,12 +43,6 @@
           <color rgba="${  0/255} ${155/255} ${ 70/255} 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/link_3.stl"/>
-        </geometry>
-      </collision> -->
     </link>
     <link name="link_4">
       <visual>
@@ -79,12 +54,6 @@
           <color rgba="${  0/255} ${155/255} ${ 70/255} 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/link_4.stl"/>
-        </geometry>
-      </collision> -->
     </link>
     <link name="link_5">
       <visual>
@@ -96,12 +65,6 @@
           <color rgba="${  0/255} ${155/255} ${ 70/255} 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/link_5.stl"/>
-        </geometry>
-      </collision> -->
     </link>
     <link name="link_6">
       <visual>
@@ -113,12 +76,6 @@
           <color rgba="0.34 0.35 0.36 1.0"/> <!-- This specifies the color of the link -->
         </material>
       </visual>
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://week2/description/meshes/collision/link_6.stl"/>
-        </geometry>
-      </collision> -->
     </link>
 
     <!-- joints: main serial chain -->
@@ -164,28 +121,11 @@
       <axis xyz="-1 0 0"/>
       <limit effort="0" lower="-6.2832" upper="6.2832" velocity="17.4532" />
     </joint>
-
-    <!-- ROS-Industrial 'base' frame: base_link to Fanuc World Coordinates transform -->
-    <link name="base" />
-    <joint name="base_link-base" type="fixed">
-      <origin xyz="0 0 0.457" rpy="0 0 0"/>
-      <parent link="base_link"/>
-      <child link="base"/>
+    
+    <joint name="fixed" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="world"/>
+      <child link="base_link"/>
     </joint>
 
-    <!-- ROS-Industrial 'flange' frame: attachment point for EEF models -->
-    <link name="flange" />
-    <joint name="joint_6-flange" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <parent link="link_6" />
-      <child link="flange" />
-    </joint>
-
-    <!-- ROS-Industrial 'tool0' frame: all-zeros tool frame -->
-    <link name="tool0" />
-    <joint name="link_6-tool0" type="fixed">
-      <origin xyz="0 0 0" rpy="${pi} ${-pi/2.0} 0" />
-      <parent link="flange" />
-      <child link="tool0" />
-    </joint>
 </robot>
