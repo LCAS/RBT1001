@@ -1,9 +1,10 @@
 import rclpy
 from rclpy.node import Node
+import numpy as np
 
 from std_srvs.srv import Empty
 from turtlesim.msg import Pose
-from turtlesim.srv import SetPen
+from turtlesim.srv import SetPen, Spawn
 from geometry_msgs.msg import Twist
 
 
@@ -47,6 +48,25 @@ class TurtlesController(Node):
         rclpy.spin_until_future_complete(self, self.future)
         # log the result
         self.get_logger().info('Turtle1 color change result: "%s"' % self.future.result())
+
+        # Declare a service client to spawn
+        self.spawn_cli = self.create_client(Spawn, '/spawn')
+        while not self.spawn_cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('service not available, waiting again...')
+        # Spawn 3 turtles
+        for i in range(3):
+            spawn_req = Spawn.Request()
+            spawn_req.x = np.random.random() * 10
+            spawn_req.y = np.random.random() * 10
+            spawn_req.name = "turtle" + str(i+2)
+            spawn_req.theta = (np.random.random() * np.pi * 2) - np.pi
+            # Call the service
+            self.future = self.spawn_cli.call_async(spawn_req)
+            # wait until the request is completed
+            rclpy.spin_until_future_complete(self, self.future)
+            # log the result
+            self.get_logger().info('turtle%d spawned: "%s"' % (i+2, self.future.result()))
+
 
         # The timer_callback will be called continuously until the node is destroyed
         timer_period = 0.5  # seconds
