@@ -113,7 +113,7 @@ if __name__=="__main__":
     Rx = HR(axis='x', q='q').subs({
         'q': -pi/2
     })
-    # N() performs numerical evaluation evaluating trigon. functions
+    # N performs numerical evaluation, evaluating trigon. functions
     res = N(Ry*Rx*v0)
     # pprint(res)
     print("Test 2 passed: {}".format(
