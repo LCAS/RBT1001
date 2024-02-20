@@ -24,6 +24,7 @@ def HR(axis='x', q='q'):
     R = None
     if axis.lower() =='x':
         # rotation matrix around x axis
+        # use the symbol qn to represent the angle variable
         R = Matrix([
             [1, 0, 0, 0],
             [0, cos(qn), -sin(qn), 0],
@@ -32,6 +33,7 @@ def HR(axis='x', q='q'):
         ]) 
     elif axis.lower() =='y':
         # rotation matrix around y axis
+        # use the symbol qn to represent the angle variable
         R = Matrix([
             [cos(qn), 0, sin(qn), 0],
             [0, 1, 0, 0],
@@ -40,6 +42,7 @@ def HR(axis='x', q='q'):
         ]) 
     elif axis.lower() =='z':
         # rotation matrix around z axis
+        # use the symbol qn to represent the angle variable
         R = Matrix([
             [cos(qn), -sin(qn), 0, 0],
             [sin(qn), cos(qn), 0, 0],
@@ -79,6 +82,7 @@ def HT(x=None, y=None, z=None):
 
     
     # translation matrix
+    # use the symbols xn, yn, zn
     T = Matrix([
         [1, 0, 0, xn],
         [0, 1, 0, yn],
@@ -88,20 +92,51 @@ def HT(x=None, y=None, z=None):
     return T
 
 if __name__=="__main__":
+    v0 = Matrix([1, 2.5, 8, 1])
+    T0 = HT(x="x", y="y", z='z').subs({
+        'x': -1,
+        'y': 2.5,
+        'z': -13
+    })
+    res = T0 * v0
+    # pprint(res)
+    print("Test 1 passed: {}".format(
+        res == Matrix([0, 5, -5, 1])
+    ))
 
-    Tz_l0 = HT(z='l0')
-    Rz_q1 = HR(axis='z', q='q1')
-    Tx_l2 = HT(x='l2')
-    Ry_q2 = HR(axis='y', q='q2')
-    Tz_l1 = HT(z='l1')
-    Ry_q3 = HR(axis='y', q='-q3')
-    Tz_l3 = HT(z='l3')
-    Tx_l4 = HT(x='l4')
 
 
-    T3 = Tz_l0 * Rz_q1 * Tx_l2 * Ry_q2 * Tz_l1 * Ry_q3 * Tz_l3 * Tx_l4
+    v0 = Matrix([1, 2.5, 8, 1])
+    Ry = HR(axis='y', q='q').subs({
+        'q': pi
+    })
+    Rx = HR(axis='x', q='q').subs({
+        'q': -pi/2
+    })
+    # N() performs numerical evaluation evaluating trigon. functions
+    res = N(Ry*Rx*v0)
+    # pprint(res)
+    print("Test 2 passed: {}".format(
+        res == Matrix([-1, 8, 2.5, 1])
+    ))
+
+    res = N(Rx*Ry*T0*v0)
+    # pprint(res)
+    print("Test 3 passed: {}".format(
+        res == Matrix([0, 5, -5, 1])
+    ))
+
+    # Rz_q1 = HR(axis='z', q='q1')
+    # Tx_l2 = HT(x='l2')
+    # Ry_q2 = HR(axis='y', q='q2')
+    # Tz_l1 = HT(z='l1')
+    # Ry_q3 = HR(axis='y', q='-q3')
+    # Tz_l3 = HT(z='l3')
+    # Tx_l4 = HT(x='l4')
+
+    # T3 = Tz_l0 * Rz_q1 * Tx_l2 * Ry_q2 * Tz_l1 * Ry_q3 * Tz_l3 * Tx_l4
     
-    pprint(simplify(T3))
+    # pprint(simplify(T3))
 
     # pprint(T3.subs({
     #     'q1': 0,
