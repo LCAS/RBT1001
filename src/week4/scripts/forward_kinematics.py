@@ -18,9 +18,10 @@ def symbolic_FK():
     # TODO: write the composition of rotations and translations using HT and HR.
     # NOTE: look at the robot's URDF src/week2/description/urdf/6dof.urdf.xacro
     #      0 to 4...
-    T = HT(z="l0")*HR(axis="z", q="q1")*HT(x="l3")*HR(axis="y", q="q2")*HT(z="l1")*HR(axis="y", q="q3")*HT(z="l2")*HT(x="l4")
+    # NOTE: pay attention to the rotation, you can give neg angles e.g. HR(q="-q3")
+    T = HT(z="l0")*HR(axis="z", q="q1")*HT(x="l3")*HR(axis="y", q="q2")*HT(z="l1")*HR(axis="y", q="-q3")*HT(z="l2")*HT(x="l4")
     #      ...wrist and tool
-    T = T*HR(axis="x", q="q4")*HR(axis="y", q="q5")*HR(axis="x", q="q6")*HT(x="l5")
+    T = T*HR(axis="x", q="-q4")*HR(axis="y", q="-q5")*HR(axis="x", q="-q6")*HT(x="l5")
 
     return T
 
@@ -49,8 +50,10 @@ def numeric_FK(T, q=(0,0,0,0,0,0)):
         'l2': 0.035,
         'l3': 0.05,
         'l4': 0.335,
-        'l5': 0.08
+        'l5': 0.16
     })
+
+    return T
 
 
 if __name__ == "__main__":

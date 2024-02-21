@@ -14,6 +14,10 @@ sudo chown -R lcas /workspaces
 
 source /opt/ros/lcas/install/setup.bash
 sudo apt update
+
+# instal moveit
+sudo apt install ros-humble-moveit
+
 rosdep --rosdistro=humble update 
 
 
