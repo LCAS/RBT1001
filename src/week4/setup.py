@@ -27,6 +27,7 @@ setup(
         'console_scripts': [
             'forward_kinematics_node = scripts.forward_kinematics_node:main',
             'inverse_kinematics_node = scripts.inverse_kinematics_node:main',
+            'inverse_kinematics_node2 = scripts.inverse_kinematics_node2:main',
         ]
     }
 )
