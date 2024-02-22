@@ -32,23 +32,14 @@ def HR(axis='x', q='q'):
             [0, 0, 0, 1]
         ]) 
     elif axis.lower() =='y':
-        # rotation matrix around y axis
+        # TODO rotation matrix around y axis
         # use the symbol qn to represent the angle variable
-        R = Matrix([
-            [cos(qn), 0, sin(qn), 0],
-            [0, 1, 0, 0],
-            [-sin(qn), 0, cos(qn), 0],
-            [0, 0, 0, 1]
-        ]) 
+        R = 
     elif axis.lower() =='z':
-        # rotation matrix around z axis
+        # TODO rotation matrix around z axis
         # use the symbol qn to represent the angle variable
-        R = Matrix([
-            [cos(qn), -sin(qn), 0, 0],
-            [sin(qn), cos(qn), 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ]) 
+        R = 
+
     return R
 
 def HT(x=None, y=None, z=None):
@@ -81,14 +72,10 @@ def HT(x=None, y=None, z=None):
         zn = 0
 
     
-    # translation matrix
+    # TODO translation matrix
     # use the symbols xn, yn, zn
-    T = Matrix([
-        [1, 0, 0, xn],
-        [0, 1, 0, yn],
-        [0, 0, 1, zn],
-        [0, 0, 0, 1]
-    ]) 
+    T = 
+    
     return T
 
 if __name__=="__main__":
@@ -103,8 +90,6 @@ if __name__=="__main__":
     print("Test 1 passed: {}".format(
         res == Matrix([0, 5, -5, 1])
     ))
-
-
 
     v0 = Matrix([1, 2.5, 8, 1])
     Ry = HR(axis='y', q='q').subs({
@@ -125,21 +110,3 @@ if __name__=="__main__":
     print("Test 3 passed: {}".format(
         res == Matrix([0, 5, -5, 1])
     ))
-
-    # Rz_q1 = HR(axis='z', q='q1')
-    # Tx_l2 = HT(x='l2')
-    # Ry_q2 = HR(axis='y', q='q2')
-    # Tz_l1 = HT(z='l1')
-    # Ry_q3 = HR(axis='y', q='-q3')
-    # Tz_l3 = HT(z='l3')
-    # Tx_l4 = HT(x='l4')
-
-    # T3 = Tz_l0 * Rz_q1 * Tx_l2 * Ry_q2 * Tz_l1 * Ry_q3 * Tz_l3 * Tx_l4
-    
-    # pprint(simplify(T3))
-
-    # pprint(T3.subs({
-    #     'q1': 0,
-    #     'q2': 0,
-    #     'q3': 0
-    # }))

@@ -1,5 +1,5 @@
 from sympy import *
-from .transformations import *
+from scripts.transformations import *
 
 
 def symbolic_FK():
@@ -19,9 +19,7 @@ def symbolic_FK():
     # NOTE: look at the robot's URDF src/week2/description/urdf/6dof.urdf.xacro
     #      0 to 4...
     # NOTE: pay attention to the rotation, you can give neg angles e.g. HR(q="-q3")
-    T = HT(z="l0")*HR(axis="z", q="q1")*HT(x="l3")*HR(axis="y", q="q2")*HT(z="l1")*HR(axis="y", q="-q3")*HT(z="l2")*HT(x="l4")
-    #      ...wrist and tool
-    T = T*HR(axis="x", q="-q4")*HR(axis="y", q="-q5")*HR(axis="x", q="-q6")*HT(x="l5")
+    T = 
 
     return T
 

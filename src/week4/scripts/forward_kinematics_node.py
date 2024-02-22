@@ -4,7 +4,7 @@ from rclpy.node import Node
 from sympy import *
 from sensor_msgs.msg import JointState
 
-from .forward_kinematics import *
+from scripts.forward_kinematics import *
 
 class ForwardKinematics(Node):
     def __init__(self):
@@ -13,15 +13,10 @@ class ForwardKinematics(Node):
 
         # TODO subscribe to the topic /joint_states to read the joint 
         #      angle values in real time. Use the callback joint_angles_cb
-        self.j_states = self.create_subscription(
-            JointState,
-            "/joint_states",
-            self.joint_angles_cb,
-            10
-        )
+        
 
         # TODO compute the symbolic transformation matrix
-        self.symT = symbolic_FK()
+        
 
     def joint_angles_cb(self, msg):
         # get the angles values
@@ -29,13 +24,13 @@ class ForwardKinematics(Node):
 
         # TODO insert the values to compute the numerical tranformation matrix
         #      and print it 
-        numT = N(numeric_FK(self.symT, q=q), 3)
+        numT = 
         print("----")
         print("Matrix: ")
         pprint(numT)
 
         # TODO Get the center position of the tool_link
-        tool_centre = numT * Matrix([0,0,0,1])
+        tool_centre = 
         print("Translation: ", end="")
         pprint(tool_centre.transpose())
 
