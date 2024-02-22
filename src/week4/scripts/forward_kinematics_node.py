@@ -4,7 +4,7 @@ from rclpy.node import Node
 from sympy import *
 from sensor_msgs.msg import JointState
 
-from .forward_kinematics import *
+from scripts.forward_kinematics import *
 
 class ForwardKinematics(Node):
     def __init__(self):

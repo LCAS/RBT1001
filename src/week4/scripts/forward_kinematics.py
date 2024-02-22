@@ -1,5 +1,5 @@
 from sympy import *
-from .transformations import *
+from scripts.transformations import *
 
 
 def symbolic_FK():
@@ -19,13 +19,13 @@ def symbolic_FK():
     # NOTE: look at the robot's URDF src/week2/description/urdf/6dof.urdf.xacro
     #      0 to 4...
     # NOTE: pay attention to the rotation, you can give neg angles e.g. HR(q="-q3")
-    T = HT(z="l0")*HR(axis="z", q="q1")*HT(x="l3")*HR(axis="y", q="q2")*HT(z="l1")*HR(axis="y", q="-q3")*HT(z="l2")*HT(x="l4")
+    T = HR(axis="z", q="q1")*HT(z="l0")*HT(x="l3")*HR(axis="y", q="q2")*HT(z="l1")*HR(axis="y", q="-q3")*HT(z="l2")*HT(x="l4")
     #      ...wrist and tool
     T = T*HR(axis="x", q="-q4")*HR(axis="y", q="-q5")*HR(axis="x", q="-q6")*HT(x="l5")
 
     return T
 
-def numeric_FK(T, q=(0,0,0,0,0,0)):
+def numeric_FK(T, q=(0,0.461,0,0,0,0)):
     """
     Substitutes values for the angles in the symbolic transformation.
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     print("Symbolic T")
     # pprint stands for pretty-print, and shows matrices in a human readable way
     # simplify reduces expressions to the simplest form
-    pprint(simplify(symT))
+    pprint(symT)
 
     numT = numeric_FK(symT)
 
