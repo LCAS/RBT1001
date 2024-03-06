@@ -1,17 +1,15 @@
 #!/bin/bash
 
-add_source_bashrc () {
-    if ! grep -q "source $1" ~/.bashrc; then 
-        echo "source $1" >> ~/.bashrc
-    fi 
-}
-
 set -e
 
 sudo apt update
 
 sudo apt install -y ros-foxy-rviz2 joint-state-publisher-gui \
-    ros-foxy-joint-state-publisher-gui sshpass iproute2
+    ros-foxy-joint-state-broadcaster ros-foxy-joint-state-controller \
+    ros-foxy-geometry-msgs ros-foxy-tf2-geometry-msgs ros-foxy-rqt* \
+    ros-foxy-joint-state-publisher-gui sshpass iproute2 iputils-ping \
+    ros-noetic-plotjuggler-ros
 
-add_source_bashrc "/opt/ros/noetic/setup.bash > /dev/null"
-add_source_bashrc "/opt/ros/foxy/setup.bash > /dev/null"
+echo "alias sr1='source /opt/ros/noetic/setup.bash &> /dev/null'" >> ~/.bashrc
+echo "alias sr2='source /opt/ros/foxy/setup.bash &> /dev/null'" >> ~/.bashrc
+echo "sr2'" >> ~/.bashrc

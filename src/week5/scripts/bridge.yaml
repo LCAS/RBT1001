@@ -1,0 +1,14 @@
+topics:
+-
+    topic: /joint_states
+    type: sensor_msgs/msg/JointState
+    queue_size: 2
+-  
+    topic: /arm_controller/safe_command
+    type: trajectory_msgs/msg/JointTrajectory
+    queue_size: 10
+    # qos:
+    #   history: keep_last
+    #   depth: 2
+    #   reliability: best_effort
+    #   durability: transient_local

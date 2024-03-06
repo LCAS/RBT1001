@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from sensor_msgs.msg import JointState
 
 class MinimalPublisher(Node):
 
@@ -11,6 +12,13 @@ class MinimalPublisher(Node):
         timer_period = 1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
+
+        self.js_pub = self.create_subscription(
+            JointState,
+            "/joint_states",
+            self.js_cb,
+            1
+        )
 
     def timer_callback(self):
         msg = JointTrajectory()
@@ -38,6 +46,9 @@ class MinimalPublisher(Node):
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: "%d"' % self.i)
         self.i += 1
+
+    def js_cb(self, msg):
+        self.get_logger().info('Got: {}'.format(msg))
 
 
 def main(args=None):
