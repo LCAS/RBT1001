@@ -34,3 +34,11 @@ export ROS_IP=${THIS_IP}
 
 sshpass -p "palroot" ssh root@${ROS_MASTER} "addLocalDns -u \"${ROS_HOSTNAME}\" -i \"${ROS_IP}\""
 
+# launch ros1_bridge to bridge all topics and services
+nohup ros2 run ros1_bridge dynamic_bridge --bridge-all-topics &
+RETVAL=$?
+if [ $RETVAL -ne 0 ]; then
+    echo "[ERROR] Error bridging robot's topics/services. See nohup.out for logs."
+else
+    echo "[OK] Successfully bridged to robot's topics/services."
+fi
