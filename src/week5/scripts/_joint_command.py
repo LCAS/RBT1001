@@ -52,35 +52,68 @@ class MinimalPublisher(Node):
             "arm_7_joint"
         ]
         # define our target point
-        target_point = JointTrajectoryPoint()
-        target_point.positions = [
-            initial_state.position[0],
-            initial_state.position[1],
-            initial_state.position[2],
-            initial_state.position[3],
-            initial_state.position[4],
-            initial_state.position[5],
-            1.0
+        p1 = JointTrajectoryPoint()
+        p1.positions = [
+            0.09,
+            -0.68,
+            -3.11,
+            2.09,
+            -1.12,
+            -0.03,
+            -2.0
         ]
-        target_point.velocities = [0.0] * 7
-        target_point.velocities[-1] = 0.5
-        target_point.accelerations = [0.0] * 7
-        target_point.time_from_start.sec = 3
-        # return back to initial 
-        final_point = JointTrajectoryPoint()
-        final_point.positions = [
-            initial_state.position[0],
-            initial_state.position[1],
-            initial_state.position[2],
-            initial_state.position[3],
-            initial_state.position[4],
-            initial_state.position[5],
-            initial_state.position[6]
+        p1.velocities = [0.5] * 7
+        p1.accelerations = [0.0] * 7
+        p1.time_from_start.sec = 3
+        p2 = JointTrajectoryPoint()
+        p2.positions = [
+            0.09,
+            -0.73,
+            -2.94,
+            1.83,
+            -1.12,
+            -0.03,
+            -2.0
         ]
-        final_point.velocities = [0.0] * 7
-        final_point.accelerations = [0.0] * 7
-        final_point.time_from_start.sec = 6
-        msg.points = [target_point, final_point]
+        p2.velocities = [0.0] * 7
+        p2.velocities[1] = 0.5
+        p2.velocities[2] = 0.5
+        p2.velocities[3] = 0.5
+        p2.accelerations = [0.0] * 7
+        p2.time_from_start.sec = 6
+        p3 = JointTrajectoryPoint()
+        p3.positions = [
+            0.09,
+            -0.72,
+            -2.94,
+            2.18,
+            -1.12,
+            -0.03,
+            -2.04
+        ]
+        p3.velocities = [0.0] * 7
+        p3.velocities[1] = 0.5
+        p3.velocities[3] = 0.5
+        p3.velocities[-1] = 0.5
+        p3.accelerations = [0.0] * 7
+        p3.time_from_start.sec = 9
+        p4 = JointTrajectoryPoint()
+        p4.positions = [
+            0.09,
+            -0.73,
+            -2.94,
+            1.83,
+            -1.12,
+            -0.03,
+            -2.0
+        ]
+        p4.velocities = [0.0] * 7
+        p4.velocities[1] = 0.5
+        p4.velocities[3] = 0.5
+        p4.velocities[-1] = 0.5
+        p4.accelerations = [0.0] * 7
+        p4.time_from_start.sec = 12
+        msg.points = [p1,p2,p3,p4]
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing commands')
 
