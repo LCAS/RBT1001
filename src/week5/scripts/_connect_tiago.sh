@@ -52,7 +52,9 @@ echo "export ROS_HOSTNAME=${ROS_HOSTNAME}" >> ~/.bashrc
 # get the last part of THIS_IP and set is as ROS_DOMAIN_ID
 CN=`echo ${THIS_IP} | cut -d . -f 4`
 export ROS_DOMAIN_ID=$CN
+export ROS_NAMESPACE=$CN
 echo "export ROS_DOMAIN_ID=${ROS_DOMAIN_ID}" >> ~/.bashrc
+echo "export ROS_NAMESPACE=${ROS_NAMESPACE}" >> ~/.bashrc
 
 
 echo "${ROS_MASTER} tiago-${TIAGO_NUM}c" >> /etc/hosts
