@@ -5,18 +5,20 @@
 #   - ETH: just pass 1 to connect via ethernet or 0 via TIAGo_WIFI
 
 
-TIAGO_NUM=$1
-ETH=$2
+TIAGO_NUM=89
+#ETH=$2
 #echo $TIAGO_NUM
 
 # Change ROS Master
-if [ "$ETH" -eq 0 ]; then
-    echo "Connecting through TIAGo_WIFI"
-    export ROS_MASTER=192.168.1.${TIAGO_NUM}
-else
-    echo "Connecting through Ethernet"
-    export ROS_MASTER=10.68.0.1
-fi
+#if [ "$ETH" -eq 0 ]; then
+#    echo "Connecting through TIAGo_WIFI"
+#    export ROS_MASTER=192.168.1.${TIAGO_NUM}
+#else
+#    echo "Connecting through Ethernet"
+#    export ROS_MASTER=10.68.0.1
+#fi
+export ROBOT_HOSTNAME=tiago-89c.network.uni
+export ROS_MASTER=`getent hosts ${ROBOT_HOSTNAME} | awk '{ print $1 }'`
 export ROS_MASTER_URI=http://${ROS_MASTER}:11311
 
 
@@ -47,6 +49,10 @@ export ROS_IP=${THIS_IP}
 # add to bashrc
 echo "export ROS_MASTER_URI=${ROS_MASTER_URI}" >> ~/.bashrc
 echo "export ROS_HOSTNAME=${ROS_HOSTNAME}" >> ~/.bashrc
+# get the last part of THIS_IP and set is as ROS_DOMAIN_ID
+CN=`echo ${THIS_IP} | cut -d . -f 4`
+export ROS_DOMAIN_ID=$CN
+echo "export ROS_DOMAIN_ID=${ROS_DOMAIN_ID}" >> ~/.bashrc
 
 
 echo "${ROS_MASTER} tiago-${TIAGO_NUM}c" >> /etc/hosts
@@ -54,7 +60,7 @@ sshpass -p "palroot" ssh root@${ROS_MASTER} "addLocalDns -u \"${ROS_HOSTNAME}\" 
 
 # define topics and services to bridge
 source /opt/ros/noetic/setup.bash &> /dev/null && rosparam load $(dirname "$0")/bridge.yaml
-source /opt/ros/foxy/setup.bash &> /dev/null && ros2 run ros1_bridge parameter_bridge
+source /opt/ros/foxy/setup.bash &> /dev/null && ros2 run ros1_bridge parameter_bridge _name:=test
 
 # launch ros1_bridge to bridge all topics and services
 # ros2 run ros1_bridge dynamic_bridge --bridge-all-topics

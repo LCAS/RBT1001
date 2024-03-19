@@ -2,6 +2,10 @@
 
 set -e
 
+sudo chown -R lcas /home/lcas
+sudo chown -R lcas /workspaces
+sudo chown -R lcas /etc/hosts
+
 sudo apt update
 
 sudo apt install -y ros-foxy-rviz2 joint-state-publisher-gui \
