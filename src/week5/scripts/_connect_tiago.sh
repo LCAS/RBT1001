@@ -5,20 +5,18 @@
 #   - ETH: just pass 1 to connect via ethernet or 0 via TIAGo_WIFI
 
 
+ETH=$1
 TIAGO_NUM=89
-#ETH=$2
 #echo $TIAGO_NUM
 
 # Change ROS Master
-#if [ "$ETH" -eq 0 ]; then
-#    echo "Connecting through TIAGo_WIFI"
-#    export ROS_MASTER=192.168.1.${TIAGO_NUM}
-#else
-#    echo "Connecting through Ethernet"
-#    export ROS_MASTER=10.68.0.1
-#fi
-export ROBOT_HOSTNAME=tiago-89c.network.uni
-export ROS_MASTER=`getent hosts ${ROBOT_HOSTNAME} | awk '{ print $1 }'`
+if [ "$ETH" -eq 0 ]; then
+    echo "Connecting through Ethernet"
+    export ROS_MASTER=10.68.0.1
+else
+    export ROBOT_HOSTNAME=tiago-89c.network.uni
+    export ROS_MASTER=`getent hosts ${ROBOT_HOSTNAME} | awk '{ print $1 }'`
+fi
 export ROS_MASTER_URI=http://${ROS_MASTER}:11311
 
 
