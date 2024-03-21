@@ -156,13 +156,16 @@ if __name__ == "__main__":
         max_speed[-1],  #qdmax
         5 #ticks
     )
-    plot(ts,qs,qds)
-
+    
     print("ts: {}".format(ts))
     print("qs: {}".format(qs))
     print("qds: {}".format(qds))
-
+    
     # execute for the first joint
+    print(sys.argv)
     if len(sys.argv) > 1:
         if str(sys.argv[1]) == "exec":
             ros_main(None, ts, qs, qds)
+
+
+    plot(ts,qs,qds)
