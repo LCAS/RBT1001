@@ -33,49 +33,14 @@ max_speed = max_speed / 60.0 * 2 * np.pi
 #  qs: list of joint values defined along the trajectory
 #  qds: joint velocities
 def lspb(tf, q0, qf, qdmax, ticks):
-    qdmax = abs(qdmax) * np.sign(qf - q0)
-    print("[LSPB] Input data\n tf:{}, q0:{}, qf:{}, qdmax:{}, ticks:{}".format(tf, q0, qf, qdmax, ticks))
 
-    if abs(qdmax) < abs(qf-q0)/tf:
-        print("qdmax too small")
-        exit()
-    elif abs(qdmax) > 2*abs(qf-q0)/tf:
-        print("qdmax too large")
-        exit()
+    #TODO your code here
 
-    # find tb
-    tb = (q0 - qf + (qdmax * tf)) / qdmax
-    print("[LSPB] \t tb:{}".format(tb))
+    return ts, qs, qds
 
-    # find max acceleration
-    qddmax = qdmax / tb
-    print("[LSPB] \t qddmax:{}".format(qddmax))
 
-    # list of times
-    ts = [float(i+1)*float(tf)/ticks for i in range(ticks)]
 
-    # list of angles
-    qs = [0.0] * len(ts)
-    # list of velocities
-    qds = [0.0] * len(ts)
-    print("[LSPB] \t ts:{}".format(ts))
-    for i, t in enumerate(ts):
-        # print(t)
-        if t <= tb:
-            # print("case 1")
-            qs[i] = q0 + (0.5 * qddmax * t**2)
-            qds[i] = qddmax * t
-        elif t <= (tf - tb):
-            # print("case 2")
-            qs[i] = (qf + q0 - qdmax * tf) / 2 + qdmax * t
-            qds[i] = qdmax
-        else:
-            # print("case 3")
-            qs[i] = qf - (0.5 * qddmax * (t - tf)**2) 
-            qds[i] = qddmax * (tf -  t)
-
-    return [0.]+ts, [0.]+qs, [0.]+qds
-
+#### THE CODE BELOW IS FOR TESTING YOUR SOLUTION, NOT TO BE EDITED BY YOU
 
 def plot(ts, qs, qds):
     plt.figure(1)
@@ -191,18 +156,13 @@ if __name__ == "__main__":
         max_speed[-1],  #qdmax
         5 #ticks
     )
-    
+    plot(ts,qs,qds)
+
     print("ts: {}".format(ts))
     print("qs: {}".format(qs))
     print("qds: {}".format(qds))
-    
+
     # execute for the first joint
-    print(sys.argv)
     if len(sys.argv) > 1:
         if str(sys.argv[1]) == "exec":
             ros_main(None, ts, qs, qds)
-
-
-    plot(ts,qs,qds)
-
-

@@ -30,7 +30,7 @@
 	// Configure tool-specific properties.
 	// "customizations": {},
 	"runArgs": [
-		// "--network=host",
+		"--network=host",
 		"--security-opt",
 		"seccomp=unconfined",
 		"--cap-add=NET_ADMIN",
