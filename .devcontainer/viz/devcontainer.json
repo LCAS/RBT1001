@@ -25,7 +25,7 @@
 	  }
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bash .devcontainer/run.sh",
+	"postCreateCommand": "bash .devcontainer/viz/run.sh",
 	"containerUser": "lcas",
 	// Configure tool-specific properties.
 	// "customizations": {},
