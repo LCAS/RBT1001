@@ -47,8 +47,8 @@ export ROS_IP=${THIS_IP}
 # add to bashrc
 echo "export ROS_MASTER_URI=${ROS_MASTER_URI}" >> ~/.bashrc
 echo "export ROS_HOSTNAME=${ROS_HOSTNAME}" >> ~/.bashrc
-# get the last part of THIS_IP and set is as ROS_DOMAIN_ID
-CN=`echo ${THIS_IP} | cut -d . -f 4`
+# get a random int and set it as ROS_DOMAIN_ID
+CN=`echo $((1 + $RANDOM % 232))`  #`echo ${THIS_IP} | cut -d . -f 4`
 export ROS_DOMAIN_ID=$CN
 export ROS_NAMESPACE=$CN
 echo "export ROS_DOMAIN_ID=${ROS_DOMAIN_ID}" >> ~/.bashrc
