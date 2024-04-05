@@ -92,7 +92,7 @@ class MinimalPublisher(Node):
         super().__init__('joint_commander')
 
         # publisher for joint command
-        self.publisher_ = self.create_publisher(JointTrajectory, '/arm_controller/safe_command', 10)
+        self.publisher_ = self.create_publisher(JointTrajectory, '/arm_controller/joint_trajectory', 10)
 
         self.ts = ts
         self.qs = qs
