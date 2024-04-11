@@ -5,4 +5,4 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y ros-humble-tiago-simulation ros-humble-plotjuggler-ros \
-    python3-matplotlib
+    python3-matplotlib ros-humble-rqt*
