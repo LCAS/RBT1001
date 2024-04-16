@@ -8,7 +8,7 @@ sudo chown -R lcas /etc/hosts
 
 sudo apt update
 
-sudo apt install ros-humble-tiago-simulation
+# sudo apt install ros-humble-tiago-simulation
 
 # sudo apt install -y ros-foxy-rviz2 joint-state-publisher-gui \
 #     ros-foxy-joint-state-broadcaster ros-foxy-joint-state-controller \
