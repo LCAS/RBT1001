@@ -81,7 +81,7 @@ class MinimalPublisher(Node):
         ]
         
         # assume that all the joints move with speed equal to the lowest maximum speed of all joints
-        qdmax = max_speed[-1]
+        qdmax = max_speed[-1] / 2
 
         # find the joint with the largest distance to target
         dists = [q[1] - q[0] for q in zip(initial_position, target_position)]
@@ -90,11 +90,11 @@ class MinimalPublisher(Node):
 
         # find the time needed by the joint with max dist
         total_time = abs_dists[max_dist_idx] / qdmax
-        ticks = 10
+        ticks = 12
         times = [float(i+1)*float(total_time)/ticks for i in range(ticks)]
         
         # compute trapezoidal profile for all joints
-        trajectory = []
+        trajectory = {}
         for i, (q0, qf) in enumerate(zip(initial_position, target_position)):
 
             # here use the lspb function
@@ -114,15 +114,21 @@ class MinimalPublisher(Node):
                         qd.append(0.0)
 
             if ts is not None:
-                trajectory.append(
-                    (ts, q, qd)
-                )
+                trajectory.update({
+                    "joint_{}".format(i+1): {
+                        "times": ts,
+                        "positions": q,
+                        "velocities": qd
+                    }
+                })
             else: #this case is when the joint is already at target position
-                trajectory.append((
-                    times,
-                    [q0 for i in range(ticks)], 
-                    [0 for i in range(ticks)]
-                ))
+                trajectory.update({
+                    "joint_{}".format(i+1): {
+                        "times": times,
+                        "positions": [q0 for i in range(ticks)], 
+                        "velocities": [0.0 for i in range(ticks)]
+                    }
+                })
 
         return trajectory, times
 
@@ -144,29 +150,33 @@ class MinimalPublisher(Node):
             # define our  point message
             msg_point = JointTrajectoryPoint()
             msg_point.positions = [
-                trajectory[0][i][1],
-                trajectory[1][i][1],
-                trajectory[2][i][1],
-                trajectory[3][i][1],
-                trajectory[4][i][1],
-                trajectory[5][i][1],
-                trajectory[6][i][1]
+                trajectory["joint_1"]["positions"][i],
+                trajectory["joint_2"]["positions"][i],
+                trajectory["joint_3"]["positions"][i],
+                trajectory["joint_4"]["positions"][i],
+                trajectory["joint_5"]["positions"][i],
+                trajectory["joint_6"]["positions"][i],
+                trajectory["joint_7"]["positions"][i]
             ]
             msg_point.velocities = [
-                trajectory[0][i][2],
-                trajectory[1][i][2],
-                trajectory[2][i][2],
-                trajectory[3][i][2],
-                trajectory[4][i][2],
-                trajectory[5][i][2],
-                trajectory[6][i][2]
+                trajectory["joint_1"]["velocities"][i],
+                trajectory["joint_2"]["velocities"][i],
+                trajectory["joint_3"]["velocities"][i],
+                trajectory["joint_4"]["velocities"][i],
+                trajectory["joint_5"]["velocities"][i],
+                trajectory["joint_6"]["velocities"][i],
+                trajectory["joint_7"]["velocities"][i]
             ]
             msg_point.accelerations = [0.0] * 7
             secs = int(t)
             msg_point.time_from_start.sec = secs
             msg_point.time_from_start.nanosec = int((t -secs) * 1e9) 
 
+
+
             msg.points.append(msg_point)
+        
+        self.get_logger().info('{}'.format(msg))
 
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing commands')

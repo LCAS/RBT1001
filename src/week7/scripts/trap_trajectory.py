@@ -44,7 +44,12 @@ def lspb(tf, q0, qf, qdmax, ticks):
         return None, None, None, "error 2"
 
     # find tb
-    tb = (q0 - qf + (qdmax * tf)) / qdmax
+    
+    # print("[LSPB] \t qdmax:{}\t q0 - qf:{}\t qdmax * tf:{}".format(qdmax, q0 - qf, qdmax * tf))
+    if (q0 - qf) == -(qdmax * tf):
+        tb = (qf - q0) / qdmax  # triangular case
+    else:
+        tb = (q0 - qf + (qdmax * tf)) / qdmax  # trapezoidal case case
     print("[LSPB] \t tb:{}".format(tb))
 
     # find max acceleration
@@ -196,7 +201,7 @@ if __name__ == "__main__":
         0,  #q0
         2,  #qf
         max_speed[-1],  #qdmax
-        5 #ticks
+        20 #ticks
     )
     print("ok: {}".format(ok))
     print("ts: {}".format(ts))
