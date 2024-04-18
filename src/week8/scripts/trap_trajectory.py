@@ -45,10 +45,7 @@ def lspb(tf, q0, qf, qdmax, ticks):
 
     # find tb
     # print("[LSPB] \t qdmax:{}\t q0 - qf:{}\t qdmax * tf:{}".format(qdmax, q0 - qf, qdmax * tf))
-    if (q0 - qf) == -(qdmax * tf):
-        tb = (qf - q0) / qdmax  # triangular case
-    else:
-        tb = (q0 - qf + (qdmax * tf)) / qdmax  # trapezoidal case case
+    tb = (q0 - qf + (qdmax * tf)) / qdmax  # trapezoidal case case
     print("[LSPB] \t tb:{}".format(tb))
 
     # find max acceleration
@@ -62,7 +59,7 @@ def lspb(tf, q0, qf, qdmax, ticks):
     qs = [0.0] * len(ts)
     # list of velocities
     qds = [0.0] * len(ts)
-    print("[LSPB] \t ts:{}".format(ts))
+    # print("[LSPB] \t ts:{}".format(ts))
     for i, t in enumerate(ts):
         # print(t)
         if t <= tb:
@@ -78,11 +75,13 @@ def lspb(tf, q0, qf, qdmax, ticks):
             qs[i] = qf - (0.5 * qddmax * (t - tf)**2) 
             qds[i] = qddmax * (tf -  t)
 
+
+    print("[LSPB] \t final qs:{}".format(qs))
     return ts, qs, qds, "ok"
 
 
 def plot(ts, qs, qds, name="q"):
-    plt.figure(1)
+    plt.figure(figsize=(8,8))
 
     if type(name) == str:
         plt.title(name)
@@ -93,11 +92,14 @@ def plot(ts, qs, qds, name="q"):
     elif type(name) == list:
         for (t, q, qd, n) in zip(ts, qs, qds, name):
             plt.subplot(211)
-            plt.plot(t, q, 'o-', label="{}_pos".format(name))
+            plt.plot(t, q, 'o-', label="{}_pos".format(n))
             plt.subplot(212)
-            plt.plot(t, qd, 'o-', label="{}_vel".format(name))
-
-    
+            plt.plot(t, qd, 'o-', label="{}_vel".format(n))
+    plt.subplot(211)
+    plt.legend(loc="center left",bbox_to_anchor=(1, 0.7))
+    plt.subplot(212)
+    plt.legend(loc="center left",bbox_to_anchor=(1, 0.7))
+    plt.tight_layout()
     plt.show()
 
 class MinimalPublisher(Node):

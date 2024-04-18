@@ -69,10 +69,11 @@ class MinimalPublisher(Node):
 
         if self.i == 0:
             trajectory, times = self.compute_joint_trajectory()
-            self.plot(trajectory, times)
             traj_msg = self.to_JointTrajectory(trajectory, times)
             viz.display(self, traj_msg)
-            time.sleep(5)
+            viz.display(self, traj_msg)
+            # time.sleep(5)
+            self.plot(trajectory, times)
             self.send_commands(traj_msg)
             self.i += 1
 
@@ -91,7 +92,8 @@ class MinimalPublisher(Node):
         ]
         
         # assume that all the joints move with speed equal to the lowest maximum speed of all joints
-        qdmax = max_speed[-1] / 2
+        qdmax = max_speed[-1]
+        print("Max speed: {}".format(qdmax))
 
         # find the joint with the largest distance to target
         dists = [q[1] - q[0] for q in zip(initial_position, target_position)]
@@ -99,9 +101,12 @@ class MinimalPublisher(Node):
         max_dist_idx = np.argmax(abs_dists) # get the index
 
         # find the time needed by the joint with max dist
-        total_time = abs_dists[max_dist_idx] / qdmax
-        ticks = 20
+        total_time = abs_dists[max_dist_idx] / qdmax  + 2 # add 1 second as heuristic
+        ticks = 50
         times = [float(i+1)*float(total_time)/ticks for i in range(ticks)]
+
+        print("Joint with largest distance: {}".format(max_dist_idx))
+        print("abs distances: {}".format(abs_dists))
         
         # compute trapezoidal profile for all joints
         trajectory = {}
@@ -111,17 +116,22 @@ class MinimalPublisher(Node):
             ts, q, qd, ok = trap.lspb(total_time, q0, qf, qdmax, ticks)
             self.get_logger().info('{}: {}'.format(i, ok))
             if ok =="error 2":
-                new_ticks = int(abs(qf - q0) / ((total_time / ticks) * abs(qdmax))) + 1
-                if new_ticks > 1:
-                    self.get_logger().info('{}_______'.format("Second attempt"))
-                    new_time = total_time / ticks * new_ticks
-                    ts, q, qd, ok = trap.lspb(new_time, q0, qf, qdmax, new_ticks)
-                    self.get_logger().info('{}: {}'.format(i, ok))
-                    # add the missing ticks by keeping the joint still 
-                    for j in range(new_ticks, ticks):
-                        ts.append(times[j])
-                        q.append(q[j-1])
-                        qd.append(0.0)
+                new_qdmax = abs(qf - q0) / (total_time - 1) # removing 1 sec as heuristic
+
+                ts, q, qd, ok = trap.lspb(total_time, q0, qf, new_qdmax, ticks)
+                self.get_logger().info('{}: {}'.format(i, ok))
+                # # hack continuing at max speed
+                # new_ticks = int(abs(qf - q0) / ((total_time / ticks) * abs(qdmax))) + 1
+                # if new_ticks > 1:
+                #     self.get_logger().info('{}_______'.format("Second attempt"))
+                #     new_time = total_time / ticks * new_ticks
+                #     ts, q, qd, ok = trap.lspb(new_time, q0, qf, qdmax, new_ticks)
+                #     self.get_logger().info('{}: {}'.format(i, ok))
+                #     # add the missing ticks by keeping the joint still 
+                #     for j in range(new_ticks, ticks):
+                #         ts.append(times[j])
+                #         q.append(q[j-1])
+                #         qd.append(0.0)
 
             if ts is not None:
                 trajectory.update({
@@ -147,7 +157,7 @@ class MinimalPublisher(Node):
             [times] * 7, 
             [traj[tjoint]["positions"] for tjoint in traj],
             [traj[tjoint]["velocities"] for tjoint in traj],
-            ["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"])
+            ["q{}".format(i) for i in range(7)])
 
 
     def to_JointTrajectory(self, trajectory, times):
