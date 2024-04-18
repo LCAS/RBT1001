@@ -78,15 +78,25 @@ def lspb(tf, q0, qf, qdmax, ticks):
             qs[i] = qf - (0.5 * qddmax * (t - tf)**2) 
             qds[i] = qddmax * (tf -  t)
 
-    return [0.]+ts, [0.]+qs, [0.]+qds, "ok"
+    return ts, qs, qds, "ok"
 
 
-def plot(ts, qs, qds):
+def plot(ts, qs, qds, name="q"):
     plt.figure(1)
-    plt.subplot(211)
-    plt.plot(ts, qs, 'o-')
-    plt.subplot(212)
-    plt.plot(ts, qds, 'o-')
+
+    if type(name) == str:
+        plt.title(name)
+        plt.subplot(211)
+        plt.plot(ts, qs, 'o-')
+        plt.subplot(212)
+        plt.plot(ts, qds, 'o-')
+    elif type(name) == list:
+        for (t, q, qd, n) in zip(ts, qs, qds, name):
+            plt.subplot(211)
+            plt.plot(t, q, 'o-', label="{}_pos".format(name))
+            plt.subplot(212)
+            plt.plot(t, qd, 'o-', label="{}_vel".format(name))
+
     
     plt.show()
 

@@ -69,6 +69,7 @@ class MinimalPublisher(Node):
 
         if self.i == 0:
             trajectory, times = self.compute_joint_trajectory()
+            self.plot(trajectory, times)
             traj_msg = self.to_JointTrajectory(trajectory, times)
             viz.display(self, traj_msg)
             time.sleep(5)
@@ -99,7 +100,7 @@ class MinimalPublisher(Node):
 
         # find the time needed by the joint with max dist
         total_time = abs_dists[max_dist_idx] / qdmax
-        ticks = 12
+        ticks = 20
         times = [float(i+1)*float(total_time)/ticks for i in range(ticks)]
         
         # compute trapezoidal profile for all joints
@@ -140,6 +141,13 @@ class MinimalPublisher(Node):
                 })
 
         return trajectory, times
+
+    def plot(self, traj, times):
+        trap.plot(
+            [times] * 7, 
+            [traj[tjoint]["positions"] for tjoint in traj],
+            [traj[tjoint]["velocities"] for tjoint in traj],
+            ["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"])
 
 
     def to_JointTrajectory(self, trajectory, times):
