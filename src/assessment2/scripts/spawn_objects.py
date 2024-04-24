@@ -3,7 +3,9 @@ import time
 import numpy as np
 import rclpy
 from gazebo_msgs.srv import SpawnEntity, DeleteEntity, GetModelList
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, TransformStamped
+from tf2_ros import StaticTransformBroadcaster
+from visualization_msgs.msg import Marker, MarkerArray
 
 from rclpy.node import Node
 
@@ -29,6 +31,12 @@ class MinimalClientAsync(Node):
             self.get_logger().info('Delete service not available, waiting again...')
         self.get_logger().info('Delete service available.')
 
+
+        self.tf_broadcaster = StaticTransformBroadcaster(self)
+
+
+        self.marker_array_pub = self.create_publisher(MarkerArray, "/task_markers", 10)
+
         self._publishers = [
             self.create_publisher(Pose, '/A_pose', 10),
             self.create_publisher(Pose, '/B_pose', 10),
@@ -39,9 +47,9 @@ class MinimalClientAsync(Node):
 
         object_names = ["A", "B", "C"]
         object_colors = [
-            "1.0 0.0 0.2 1.0",
-            "0.1 0.6 0.1 1.0",
-            "0.0 0.3 1.0 1.0"
+            [1.0, 0.0, 0.2, 1.0],
+            [0.1, 0.6, 0.1, 1.0],
+            [0.0, 0.3, 1.0, 1.0]
         ]
         color_names = ["red", "green", "blue"]
 
@@ -55,7 +63,9 @@ class MinimalClientAsync(Node):
         
         existing_models = [m for m in future.result().model_names if m in object_names]
 
-        for (name, color, color_name, publisher) in zip(object_names, object_colors, color_names, self._publishers):
+        marker_array_msg = MarkerArray()
+
+        for i, (name, color, color_name, publisher) in enumerate(zip(object_names, object_colors, color_names, self._publishers)):
 
             # delete previous object
             if name in existing_models:
@@ -92,7 +102,7 @@ class MinimalClientAsync(Node):
                         <emissive>{0:}</emissive> \
                     </material> \
                 </visual> \
-                </link></model></sdf>".format(color)
+                </link></model></sdf>".format(" ".join([str(c) for c in color]))
             spawn_req.initial_pose.position.x = pose.position.x
             spawn_req.initial_pose.position.y = pose.position.y
             spawn_req.initial_pose.position.z = pose.position.z
@@ -100,6 +110,39 @@ class MinimalClientAsync(Node):
             # spawn new object
             future = self.spawn_client.call_async(spawn_req)
             rclpy.spin_until_future_complete(self, future)
+
+            # add frame
+            t = TransformStamped()
+            t.header.stamp = self.get_clock().now().to_msg()
+            t.header.frame_id = 'base_link'
+            t.child_frame_id = name
+            t.transform.translation.x = pose.position.x
+            t.transform.translation.y = pose.position.y
+            t.transform.translation.z = pose.position.z
+            t.transform.rotation.x = 0.0
+            t.transform.rotation.y = 0.0
+            t.transform.rotation.z = 0.0
+            t.transform.rotation.w = 1.0
+            self.tf_broadcaster.sendTransform(t)
+
+            # add visual marker for rviz
+            marker_msg = Marker()
+            marker_msg.ns = name
+            marker_msg.id = i
+            marker_msg.type = Marker.SPHERE
+            marker_msg.header.frame_id = "base_link"
+            marker_msg.scale.x = 5e-2
+            marker_msg.scale.y = 5e-2
+            marker_msg.scale.z = 5e-2
+            marker_msg.color.r = color[0]
+            marker_msg.color.g = color[1]
+            marker_msg.color.b = color[2]
+            marker_msg.color.a = 1.0
+            marker_msg.pose.position.x = pose.position.x
+            marker_msg.pose.position.y = pose.position.y
+            marker_msg.pose.position.z = pose.position.z
+            marker_msg.pose.orientation.w = 1.
+            marker_array_msg.markers.append(marker_msg)
 
             # publish on topic
             publisher.publish(pose)
@@ -111,6 +154,9 @@ class MinimalClientAsync(Node):
                 pose.position.y,
                 pose.position.z
             ))
+
+        # publish list of rviz markers
+        self.marker_array_pub.publish(marker_array_msg)
 
 
 
