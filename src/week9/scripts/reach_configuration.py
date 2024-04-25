@@ -26,10 +26,10 @@ max_speed = max_speed / 60.0 * 2 * np.pi
 
 # The position our arm should reach
 target_position = [
-    2.62400046502254,    #arm_1_joint
-    1.0443466363423133,  #arm_2_joint
+    0.6496184220867192,    #arm_1_joint
+    -1.1910595388819816,  #arm_2_joint
     -3.141592653589793,  #arm_3_joint
-    -0.6849420720706895,   #arm_4_joint
+    1.7904987228240348,   #arm_4_joint
     -0.,  #arm_5_joint
     -0.,  #arm_6_joint
     -0.   #arm_7_joint
