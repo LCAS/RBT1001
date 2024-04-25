@@ -86,9 +86,14 @@ class MinimalClientAsync(Node):
 
             # create Pose object message
             pose = Pose()
-            pose.position.x = 0.4 + np.random.rand() * 0.2
-            pose.position.y = np.random.rand() * 1.5 - 0.75
-            pose.position.z = 0.75 + (np.random.rand() * 0.5)
+            if name == "B":
+                pose.position.x = 0.5
+                pose.position.y = -0.5
+                pose.position.z = 0.85
+            else:
+                pose.position.x = 0.6 + np.random.rand() * 0.3
+                pose.position.y = np.random.rand() * 1 - 0.5
+                pose.position.z = 0.75 + (np.random.rand() * 0.5)
 
             # create gazebo spawn request
             spawn_req = SpawnEntity.Request()
