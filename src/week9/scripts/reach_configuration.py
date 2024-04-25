@@ -26,13 +26,13 @@ max_speed = max_speed / 60.0 * 2 * np.pi
 
 # The position our arm should reach
 target_position = [
-    1.6,    #arm_1_joint
-    -0.93,  #arm_2_joint
-    -3.13,  #arm_3_joint
-    1.83,   #arm_4_joint
-    -1.57,  #arm_5_joint
-    -0.62,  #arm_6_joint
-    -1.57   #arm_7_joint
+    2.62400046502254,    #arm_1_joint
+    1.0443466363423133,  #arm_2_joint
+    -3.141592653589793,  #arm_3_joint
+    -0.6849420720706895,   #arm_4_joint
+    -0.,  #arm_5_joint
+    -0.,  #arm_6_joint
+    -0.   #arm_7_joint
 ]
 
 class MinimalPublisher(Node):

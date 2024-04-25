@@ -43,7 +43,11 @@ class MinimalClientAsync(Node):
             self.create_publisher(Pose, '/C_pose', 10)
         ]
 
+        self.transforms = []
         self.send_request()
+
+        period = 0.1
+        self.timer = self.create_timer(period, self.pub_transform)
 
     def send_request(self):
 
@@ -82,9 +86,9 @@ class MinimalClientAsync(Node):
 
             # create Pose object message
             pose = Pose()
-            pose.position.x = 0.2 + np.random.rand() * 0.5
+            pose.position.x = 0.4 + np.random.rand() * 0.2
             pose.position.y = np.random.rand() * 1.5 - 0.75
-            pose.position.z = 0.1 + (np.random.rand() * 1.5)
+            pose.position.z = 0.75 + (np.random.rand() * 0.5)
 
             # create gazebo spawn request
             spawn_req = SpawnEntity.Request()
@@ -125,7 +129,7 @@ class MinimalClientAsync(Node):
             t.transform.rotation.y = 0.0
             t.transform.rotation.z = 0.0
             t.transform.rotation.w = 1.0
-            self.tf_broadcaster.sendTransform(t)
+            self.transforms.append(t)
 
             # add visual marker for rviz
             marker_msg = Marker()
@@ -160,6 +164,10 @@ class MinimalClientAsync(Node):
         # publish list of rviz markers
         self.marker_array_pub.publish(marker_array_msg)
 
+    def pub_transform(self):
+        for t in self.transforms:
+            self.tf_broadcaster.sendTransform(t)
+
 
 
 def main(args=None):
@@ -168,7 +176,6 @@ def main(args=None):
     minimal_client = MinimalClientAsync()
 
     rclpy.spin(minimal_client)
-
     # while rclpy.ok():
     # rclpy.spin_once(minimal_client)
         # if minimal_client.future.done():
