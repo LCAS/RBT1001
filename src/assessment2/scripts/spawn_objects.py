@@ -43,6 +43,8 @@ class MinimalClientAsync(Node):
             self.create_publisher(Pose, '/C_pose', 10)
         ]
 
+        self.send_request()
+
     def send_request(self):
 
         object_names = ["A", "B", "C"]
@@ -164,10 +166,8 @@ def main(args=None):
     rclpy.init(args=args)
 
     minimal_client = MinimalClientAsync()
-    minimal_client.send_request()
 
-    rclpy.spin_once(minimal_client)
-    rclpy.spin_once(minimal_client)
+    rclpy.spin(minimal_client)
 
     # while rclpy.ok():
     # rclpy.spin_once(minimal_client)

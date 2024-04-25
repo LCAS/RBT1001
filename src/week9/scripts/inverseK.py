@@ -10,51 +10,50 @@ from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
 
 
-class FrameListener(Node):
-
+class InverseKinematics(Node):
     def __init__(self):
         super().__init__('inverse_kinematics_node')
 
-        # Declare and acquire `target_frame` parameter
-        self.target_frame = self.declare_parameter(
-          'target_frame', 'arm_6_link').get_parameter_value().string_value
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
-        # Call on_timer function every second
-        self.timer = self.create_timer(1.0, self.on_timer)
 
-    def on_timer(self):
-        # Store frame names in variables that will be used to
-        # compute transformations
-        from_frame_rel = self.target_frame
-        to_frame_rel = 'arm_1_link'
+    def get_transform(self, base_frame, target_frame):
 
+        # Declare and acquire `target_frame` parameter
+        from_frame_rel = self.declare_parameter(
+          'target_frame', target_frame).get_parameter_value().string_value
 
         # Look up for the transformation between target_frame and turtle2 frames
         # and send velocity commands for turtle2 to reach target_frame
-        try:
-            t = self.tf_buffer.lookup_transform(
-                to_frame_rel,
-                from_frame_rel,
-                rclpy.time.Time())
-            self.get_logger().info(
-                f'Transform {to_frame_rel} to {from_frame_rel} is: {t}')
-        except TransformException as ex:
-            self.get_logger().info(
-                f'Could not transform {to_frame_rel} to {from_frame_rel}: {ex}')
-            return
+        while True:
+            try:
+                t = self.tf_buffer.lookup_transform(
+                    base_frame,
+                    from_frame_rel,
+                    rclpy.time.Time())
+                self.get_logger().info(
+                    f'Transform {base_frame} to {from_frame_rel} is: {t}')
+                return t
+            except TransformException as ex:
+                self.get_logger().info(
+                    f'Could not transform {base_frame} to {from_frame_rel}: {ex}')
 
 
 def main():
     rclpy.init()
-    node = FrameListener()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        print("DONE")
-        pass
+    node = InverseKinematics()
+
+
+    node.get_transform("arm_1_link", "arm_7_link")
+
+
+    # while True:
+    #     try:
+    #         rclpy.spin_once(node)
+    #     except KeyboardInterrupt:
+    #         break
 
     rclpy.shutdown()
 
