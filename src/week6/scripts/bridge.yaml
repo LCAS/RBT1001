@@ -7,6 +7,10 @@ topics:
     topic: /arm_controller/safe_command
     type: trajectory_msgs/msg/JointTrajectory
     queue_size: 10
+-  
+    topic: /task_markers
+    type: visualization_msgs/msg/MarkerArray
+    queue_size: 10
     # qos:
     #   history: keep_last
     #   depth: 2

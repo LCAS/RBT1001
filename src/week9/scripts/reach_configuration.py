@@ -26,10 +26,10 @@ max_speed = max_speed / 60.0 * 2 * np.pi
 
 # The position our arm should reach
 target_position = [
-    0.6496184220867192,    #arm_1_joint
-    -1.1910595388819816,  #arm_2_joint
+    0.8071094761673023,    #arm_1_joint
+    -1.614094111930983,  #arm_2_joint
     -3.141592653589793,  #arm_3_joint
-    1.7904987228240348,   #arm_4_joint
+    2.0746457378526233,   #arm_4_joint
     -0.,  #arm_5_joint
     -0.,  #arm_6_joint
     -0.   #arm_7_joint
@@ -41,7 +41,7 @@ class MinimalPublisher(Node):
         super().__init__('joint_commander')
 
         # publisher for joint command
-        self.publisher_ = self.create_publisher(JointTrajectory, '/arm_controller/joint_trajectory', 10)
+        self.publisher_ = self.create_publisher(JointTrajectory, '/arm_controller/safe_command', 10)
 
         self.last_state = None
         self.joint_idx = {}
@@ -70,10 +70,10 @@ class MinimalPublisher(Node):
         if self.i == 0:
             trajectory, times = self.compute_joint_trajectory()
             traj_msg = self.to_JointTrajectory(trajectory, times)
-            viz.display(self, traj_msg)
-            viz.display(self, traj_msg)
-            # time.sleep(5)
-            self.plot(trajectory, times)
+            # viz.display(self, traj_msg)
+            # viz.display(self, traj_msg)
+            
+            # self.plot(trajectory, times)
             self.send_commands(traj_msg)
             self.i += 1
 
