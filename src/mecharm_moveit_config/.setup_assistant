@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: mycobot_description
+    relative_path: urdf/mecharm_270_m5/mecharm_270_m5.urdf
+  srdf:
+    relative_path: config/firefighter.srdf
+  package_settings:
+    author_name: Francesco Del Duchetto
+    author_email: fdelduchetto@lincoln.ac.uk
+    generated_timestamp: 1737565099
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

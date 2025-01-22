@@ -14,7 +14,6 @@ RUN DEBIAN_FRONTEND=noninteractive pip install pymycobot --upgrade
 RUN . /opt/ros/humble/setup.sh && \
     cd /opt/ros/lcas/src/ && \
     git clone --depth 1 https://github.com/elephantrobotics/mycobot_ros2.git && \
-    cd .. && colcon build  && \
-    rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
+    cd .. && colcon build
 
 WORKDIR /home/lcas/ws
