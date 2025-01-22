@@ -1,9 +1,13 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "lcas-ros2-teaching-humble",
+	"name": "lcas-ros2-rbt1001-humble",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "lcas.lincoln.ac.uk/lcas/devcontainer/ros2-teaching:2324-devel",
+	"image": "lcas.lincoln.ac.uk/lcas/devcontainer/ros2-teaching-rbt1001:latest",
+	// "build": {
+	// 	"dockerfile": "Dockerfile",
+	// 	"context": "."
+	// },
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/desktop-lite:1": {}
