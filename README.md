@@ -14,6 +14,6 @@ Go to the [wiki page](https://github.com/francescodelduchetto/RBT1001/wiki)
 4. The docker image used to provide the Development Container is provided by the [L-CAS](https://lcas.lincoln.ac.uk) Container Registry. You must log in to use it. For simple read access, the username and password is public and is username `lcas`, password: `lincoln`. So, to log in do `docker login -u lcas -p lincoln lcas.lincoln.ac.uk` (you should only have to do this once, as the credentials should be cached unless your home directory is wiped).
 
 ### Open in VSCode
-Follow instructions at: [Setup your workstation](https://github.com/LCAS/RBT1001/wiki/Setup-your-workstation)
+Follow instructions at: [Setup your workstation](https://github.com/LCAS/RBT1001/wiki/Setup-your-workstation-%5B2425%5D)
 
 
