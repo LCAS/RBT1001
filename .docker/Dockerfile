@@ -2,6 +2,7 @@ FROM lcas.lincoln.ac.uk/lcas/devcontainer/ros2-teaching:2324-devel
 
 # Install additional ROS 2 packages
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
+    apt upgrade -y && \
     apt install -y \
     python3-argcomplete \
     python3-colcon-common-extensions \
