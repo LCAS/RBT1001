@@ -6,7 +6,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     python3-argcomplete \
     python3-colcon-common-extensions \
     ros-humble-joint-state-publisher-gui \
-    ros-humble-moveit
+    ros-humble-moveit \
+    ros-humble-gripper-controllers \
+    ros-humble-ros2-control \
+    ros-humble-ros2-controller-manager \
+    ros-humble-ros2-controllers
+
 
 RUN DEBIAN_FRONTEND=noninteractive pip install pymycobot --upgrade
 
