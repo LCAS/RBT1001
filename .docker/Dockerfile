@@ -24,7 +24,8 @@ RUN . /opt/ros/humble/setup.sh && \
     cd .. && \
     colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y && \
+RUN DEBIAN_FRONTEND=noninteractive apt update && \
+    apt install -y && \
     ros-humble-gripper-controllers \
     ros-humble-ros2-control \
     ros-humble-controller-manager \
