@@ -21,7 +21,7 @@ def generate_launch_description():
             publish_robot_description=True, publish_robot_description_semantic=True
         )
         .planning_pipelines(
-            pipelines=["ompl", "stomp", "pilz_industrial_motion_planner"]
+            pipelines=["stomp", "pilz_industrial_motion_planner"]
         )
         # Add kinematics configuration
         .robot_description_kinematics(file_path="config/kinematics.yaml")
@@ -141,13 +141,13 @@ def generate_launch_description():
         arguments=["mecharm_controller", "-c", "/controller_manager"],
     )
 
-    # # Add the target marker node
-    # target_marker_node = Node(
-    #     package="",  # Leave empty for Python scripts not in a package
-    #     executable="/workspaces/RBT1001/src/week6/target_marker.py",
-    #     name="target_marker_node",
-    #     output="screen",
-    # )
+    # Add the target marker node
+    target_marker_node = Node(
+        package="utils",
+        executable="target_marker",
+        name="target_marker_node",
+        output="screen",
+    )
 
     return LaunchDescription(
         [
@@ -159,6 +159,6 @@ def generate_launch_description():
             ros2_control_node,
             joint_state_broadcaster_spawner,
             arm_controller_spawner,
-            # target_marker_node,  # Add the target marker node to the launch description
+            target_marker_node,  # Add the target marker node to the launch description
         ]
     )

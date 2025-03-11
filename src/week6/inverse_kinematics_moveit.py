@@ -1,91 +1,72 @@
 import rclpy
 from rclpy.node import Node
-import numpy as np
+from moveit_msgs.srv import GetPositionIK
+from geometry_msgs.msg import PoseStamped
 
-from sensor_msgs.msg import JointState
-
-class InverseKinematicsMoveIt(Node):
-
+class IKClient(Node):
     def __init__(self):
-        # Defines the name of the node
-        super().__init__('inverse_kinematics_moveit')
+        super().__init__('ik_client')
+        self.cli = self.create_client(GetPositionIK, '/compute_ik')
+        while not self.cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('service not available, waiting again...')
+        self.req = GetPositionIK.Request()
+        self.target_pose = None
+        # subscribe to /target_pose topic
+        self.create_subscription(PoseStamped, 'target_pose', self.target_pose_callback, 10)
+        self.future = None
+        self.get_logger().info('IK client ready, waiting for target poses...')
 
-        # Declare a topic this node will listen to; for every new message, 
-        # the callback will be called.
-        self.t1_pose_sub = self.create_subscription(
-            JointState,
-            "/joint_states",
-            self.joint_states_cb,
-            10
-        )
+    def target_pose_callback(self, msg):
+        self.target_pose = msg
+        self.send_request()
 
-        self.joint_states = [
-            0., 0., 0., 0., 0., 0.
-        ]
-
-        # The timer_callback will be called continuously until the node is destroyed
-        timer_period = 2.  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
-
-    # this function receives joint state messages from the robot and stores them
-    def joint_states_cb(self, msg):
-        self.joint_states = msg.position
-
-    # returns a Homogeneous Rotation matrix
-    def HR(self, axis, angle):
-        if axis == 'x':
-            mat = [
-                [1, 0, 0, 0],
-                [0, np.cos(angle), -np.sin(angle), 0],
-                [0, np.sin(angle), np.cos(angle), 0],
-                [0, 0, 0, 1]
+    def send_request(self):
+        if self.target_pose is None:
+            return
+            
+        self.req.ik_request.group_name = 'mecharm'
+        self.req.ik_request.robot_state.joint_state.name = [
+            'joint1_to_base',
+            'joint2_to_joint1',
+            'joint3_to_joint2',
+            'joint4_to_joint3',
+            'joint5_to_joint4',
+            'joint6_to_joint5'
             ]
-        elif axis == 'y':
-            ### TODO complete this function
-
+        self.req.ik_request.robot_state.joint_state.position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         
-        return np.array(mat)
+        # Define the target pose
+        target_pose = PoseStamped()
+        target_pose.header.frame_id = 'base'
+        target_pose.pose.position.x = self.target_pose.pose.position.x
+        target_pose.pose.position.y = self.target_pose.pose.position.y
+        target_pose.pose.position.z = self.target_pose.pose.position.z
+        target_pose.pose.orientation.x = self.target_pose.pose.orientation.x
+        target_pose.pose.orientation.y = self.target_pose.pose.orientation.y
+        target_pose.pose.orientation.z = self.target_pose.pose.orientation.z
+        target_pose.pose.orientation.w = self.target_pose.pose.orientation.w
+        self.req.ik_request.pose_stamped = target_pose
 
-    # returns a Homogeneous Translation matrix
-    def HT(self, axis, distance):
-        # TODO complete this function
-
-        return np.array(mat)
-    
-    ##
-    #  This function will be called at a frequency of 1/timer_period Hz
-    ##
-    def timer_callback(self):
-        # Here you should implement the direct kinematics of the robot
-
-        q1 = self.joint_states[0]
-        q2 = self.joint_states[1]
-        q3 = self.joint_states[2]
-        q4 = self.joint_states[3]
-        q5 = self.joint_states[4]
-        q6 = self.joint_states[5]
+        self.future = self.cli.call_async(self.req)
+        self.future.add_done_callback(self.ik_response_callback)
         
-        T = ## TODO: compose the final transformation matrix 
-
-        # printing
-        self.get_logger().info('The final transformation matrix is:')
-        with np.printoptions(precision=3, suppress=True):
-            self.get_logger().info('\n' + str(T))
-
-
-
+    def ik_response_callback(self, future):
+        try:
+            response = future.result()
+            self.get_logger().info('IK solution: %s' % str(response.solution.joint_state.position))
+        except Exception as e:
+            self.get_logger().error('Service call failed %r' % (e,))
 
 def main(args=None):
     rclpy.init(args=args)
-
-    node = InverseKinematicsMoveIt()
-
-    rclpy.spin(node)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    node.destroy_node()
+    ik_client = IKClient()
+    
+    try:
+        rclpy.spin(ik_client)
+    except KeyboardInterrupt:
+        pass
+    
+    ik_client.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
