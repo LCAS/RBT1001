@@ -1,0 +1,22 @@
+planner_configs:
+  RRTConnect:
+    type: geometric::RRTConnect
+  RRT:
+    type: geometric::RRT
+  RRTstar:
+    type: geometric::RRTstar
+  PRM:
+    type: geometric::PRM
+  PRMstar:
+    type: geometric::PRMstar
+
+mecharm:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - RRTConnect
+    - RRT
+    - RRTstar
+    - PRM
+    - PRMstar
+  projection_evaluator: joints(joint1_to_base,joint2_to_joint1)
+  longest_valid_segment_fraction: 0.005

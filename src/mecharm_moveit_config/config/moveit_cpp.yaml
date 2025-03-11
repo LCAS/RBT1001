@@ -1,0 +1,40 @@
+move_group:
+  planning_pipelines: ["ompl"]
+  pipeline_names: ["ompl"]
+  ompl:
+    planner_configs: ["RRTConnectkConfigDefault"]
+    start_state_max_bounds_error: 0.1
+    max_solution_attempts: 10
+    max_planning_time: 5.0
+    max_velocity_scaling_factor: 1.0
+    max_acceleration_scaling_factor: 1.0
+
+planning_pipelines:
+  ompl:
+    type: "ompl_interface/OMPLPlanner"
+    default_planner_config: "RRTConnectkConfigDefault"
+    planner_configs: ["RRTConnectkConfigDefault"]
+
+planner_configs:
+  RRTConnectkConfigDefault:
+    type: "geometric::RRTConnect"
+    range: 0.0
+    goal_bias: 0.05
+    max_solution_attempts: 10
+    max_planning_time: 5.0
+    max_velocity_scaling_factor: 1.0
+    max_acceleration_scaling_factor: 1.0
+
+robot_description: "robot_description"
+robot_description_semantic: "robot_description_semantic"
+robot_description_kinematics: "robot_description_kinematics"
+robot_description_planning:
+  joint_limits: "joint_limits"
+  planning_pipelines: "planning_pipelines"
+  cartesian_limits:
+    max_trans_vel: 1.0
+    max_trans_acc: 0.5
+    max_trans_dec: 0.5
+    max_rot_vel: 1.0
+    max_rot_acc: 0.5
+    max_rot_dec: 0.5

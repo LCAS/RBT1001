@@ -6,7 +6,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
     python3-argcomplete \
     python3-colcon-common-extensions \
-    ros-humble-joint-state-publisher-gui
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-ros2-controllers
 
 # Install moveit2 from source in order to have moveit_py API which is not directly integrated into humble distribution
 RUN . /opt/ros/humble/setup.sh && \
@@ -22,14 +23,13 @@ RUN . /opt/ros/humble/setup.sh && \
     cd /opt/ros/lcas/src/ && \
     git clone --depth 1 https://github.com/elephantrobotics/mycobot_ros2.git && \
     cd .. && \
-    colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build
 
-RUN DEBIAN_FRONTEND=noninteractive apt update && \
-    apt install -y && \
-    ros-humble-gripper-controllers \
-    ros-humble-ros2-control \
-    ros-humble-controller-manager \
-    ros-humble-ros2-controllers
+# RUN DEBIAN_FRONTEND=noninteractive apt update && \
+#     apt upgrade -y && \
+#     apt install -y && \
+#     ros-humble-ros2-control \
+#     ros-humble-controller-manager \
 
 
 WORKDIR /home/lcas/ws
