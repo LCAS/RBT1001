@@ -8,9 +8,12 @@ import rclpy
 from rclpy.node import Node
 from interactive_markers import InteractiveMarkerServer
 from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, Marker, InteractiveMarkerFeedback
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, TransformStamped
 from builtin_interfaces.msg import Time
+from tf2_ros import StaticTransformBroadcaster
+from tf_transformations import quaternion_from_euler
 import time
+import numpy as np
 
 class TargetMarkerNode(Node):
     def __init__(self):
@@ -25,6 +28,11 @@ class TargetMarkerNode(Node):
 
         # Create publisher for target pose
         self.pose_publisher = self.create_publisher(PoseStamped, 'target_pose', 10)
+
+
+
+        self.tf_broadcaster = StaticTransformBroadcaster(self)
+
         
         # Create the interactive marker
         self.create_target_marker()
@@ -38,6 +46,11 @@ class TargetMarkerNode(Node):
         int_marker.pose.position.x = 0.2
         int_marker.pose.position.y = 0.0
         int_marker.pose.position.z = 0.243
+        # The orientation is set to align the marker with the z-axis
+        int_marker.pose.orientation.x = 0.0
+        int_marker.pose.orientation.y = 0.0
+        int_marker.pose.orientation.z = 0.0
+        int_marker.pose.orientation.w = 1.0
         int_marker.description = "Target Pose Control"
         
         # Create a visible sphere as the marker
@@ -123,7 +136,37 @@ class TargetMarkerNode(Node):
         pose_msg.header.stamp = self.get_clock().now().to_msg()
         pose_msg.pose = int_marker.pose
         self.pose_publisher.publish(pose_msg)
+
+        # add frame to tf
+        th = TransformStamped()
+        th.header.stamp = self.get_clock().now().to_msg()
+        th.header.frame_id = 'base'
+        th.child_frame_id = 'hidden'
+        th.transform.translation.x = int_marker.pose.position.x
+        th.transform.translation.y = int_marker.pose.position.y
+        th.transform.translation.z = int_marker.pose.position.z
+        th.transform.rotation.x = int_marker.pose.orientation.x
+        th.transform.rotation.y = int_marker.pose.orientation.y
+        th.transform.rotation.z = int_marker.pose.orientation.z
+        th.transform.rotation.w = int_marker.pose.orientation.w
+
+        t = TransformStamped()
+        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.stamp.nanosec += 3
+        t.header.frame_id = 'hidden'
+        t.child_frame_id = 'target'
+        # t.transform.translation = th.transform.translation
+        q = quaternion_from_euler(0, np.pi/2, 0)
+        t.transform.rotation.x = q[0]
+        t.transform.rotation.y = q[1]
+        t.transform.rotation.z = q[2]
+        t.transform.rotation.w = q[3]
+
+        self.tf_broadcaster.sendTransform(th)
+        self.tf_broadcaster.sendTransform(t)
+
         self.get_logger().info(f"Publishing target pose: position=({pose_msg.pose.position.x:.2f}, {pose_msg.pose.position.y:.2f}, {pose_msg.pose.position.z:.2f})")
+
 
     def process_feedback(self, feedback):
         # Create and publish PoseStamped message
@@ -132,6 +175,35 @@ class TargetMarkerNode(Node):
         pose_msg.header.stamp = self.get_clock().now().to_msg()
         pose_msg.pose = feedback.pose
         self.pose_publisher.publish(pose_msg)
+
+        # add frame to tf
+        th = TransformStamped()
+        th.header.stamp = self.get_clock().now().to_msg()
+        th.header.frame_id = 'base'
+        th.child_frame_id = 'hidden'
+        th.transform.translation.x = feedback.pose.position.x
+        th.transform.translation.y = feedback.pose.position.y
+        th.transform.translation.z = feedback.pose.position.z
+        th.transform.rotation.x = feedback.pose.orientation.x
+        th.transform.rotation.y = feedback.pose.orientation.y
+        th.transform.rotation.z = feedback.pose.orientation.z
+        th.transform.rotation.w = feedback.pose.orientation.w
+
+        t = TransformStamped()
+        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.stamp.nanosec += 3
+        t.header.frame_id = 'hidden'
+        t.child_frame_id = 'target'
+        # t.transform.translation = th.transform.translation
+        q = quaternion_from_euler(0, np.pi/2, 0)
+        t.transform.rotation.x = q[0]
+        t.transform.rotation.y = q[1]
+        t.transform.rotation.z = q[2]
+        t.transform.rotation.w = q[3]
+
+        self.tf_broadcaster.sendTransform(th)
+        self.tf_broadcaster.sendTransform(t)
+
         self.get_logger().info(f"Publishing target pose: position=({pose_msg.pose.position.x:.2f}, {pose_msg.pose.position.y:.2f}, {pose_msg.pose.position.z:.2f})")
 
 def main():
