@@ -25,6 +25,11 @@ RUN . /opt/ros/humble/setup.sh && \
     cd .. && \
     colcon build
 
+    # Install additional ROS 2 packages
+RUN DEBIAN_FRONTEND=noninteractive apt update && \
+    apt upgrade -y && \
+    apt install -y \
+    ros-humble-tf-transformations
 # RUN DEBIAN_FRONTEND=noninteractive apt update && \
 #     apt upgrade -y && \
 #     apt install -y && \
