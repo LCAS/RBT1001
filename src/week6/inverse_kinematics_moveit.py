@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from moveit_msgs.srv import GetPositionIK
 from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import JointState
 
 class IKClient(Node):
     def __init__(self):
@@ -13,6 +14,11 @@ class IKClient(Node):
         self.target_pose = None
         # subscribe to /target_pose topic
         self.create_subscription(PoseStamped, 'target_pose', self.target_pose_callback, 10)
+
+        # publish to /joint_states topic
+        self.joint_states_pub = self.create_publisher(JointState, '/joint_states', 10) 
+
+
         self.future = None
         self.get_logger().info('IK client ready, waiting for target poses...')
 
@@ -56,6 +62,24 @@ class IKClient(Node):
             self.get_logger().info('IK solution: %s' % str(response.solution.joint_state.position))
         except Exception as e:
             self.get_logger().error('Service call failed %r' % (e,))
+        else:
+            if len(response.solution.joint_state.position) == 6:
+                self.send_joint_states(*response.solution.joint_state.position)
+
+        # Publish the joint states
+    def send_joint_states(self, q1, q2, q3, q4, q5, q6):
+        msg = JointState()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.name = [
+            'joint1_to_base',
+            'joint2_to_joint1',
+            'joint3_to_joint2',
+            'joint4_to_joint3',
+            'joint5_to_joint4',
+            'joint6_to_joint5',
+        ]
+        msg.position = [q1, q2, q3, q4, q5, q6]
+        self.joint_states_pub.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
