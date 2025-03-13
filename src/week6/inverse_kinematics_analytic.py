@@ -73,7 +73,7 @@ class IKClient(Node):
         if self.target_pose is None:
             return
         
-        q1, q2, q3, q4, q5, q6 = 0, 0, 0, 0, 0, 0
+        q1, q2, q3, q4, q5, q6 = 0., 0., 0., 0., 0., 0.
 
         # TODO: implement the analytic inverse kinematics solution here
         
