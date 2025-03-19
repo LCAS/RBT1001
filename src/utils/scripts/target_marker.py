@@ -157,10 +157,10 @@ class TargetMarkerNode(Node):
         t.child_frame_id = 'target'
         # t.transform.translation = th.transform.translation
         # q = quaternion_from_euler(0, np.pi/2, 0)
-        # t.transform.rotation.x = q[0]
-        # t.transform.rotation.y = q[1]
-        # t.transform.rotation.z = q[2]
-        # t.transform.rotation.w = q[3]
+        t.transform.rotation.x = 0.5
+        t.transform.rotation.y = -0.5
+        t.transform.rotation.z = 0.5
+        t.transform.rotation.w = -0.5
 
         self.tf_broadcaster.sendTransform(th)
         self.tf_broadcaster.sendTransform(t)
@@ -196,10 +196,10 @@ class TargetMarkerNode(Node):
         t.child_frame_id = 'target'
         # t.transform.translation = th.transform.translation
         # q = quaternion_from_euler(0, np.pi/2, 0)
-        # t.transform.rotation.x = q[0]
-        # t.transform.rotation.y = q[1]
-        # t.transform.rotation.z = q[2]
-        # t.transform.rotation.w = q[3]
+        t.transform.rotation.x = 0.5
+        t.transform.rotation.y = -0.5
+        t.transform.rotation.z = 0.5
+        t.transform.rotation.w = -0.5
 
         self.tf_broadcaster.sendTransform(th)
         self.tf_broadcaster.sendTransform(t)
