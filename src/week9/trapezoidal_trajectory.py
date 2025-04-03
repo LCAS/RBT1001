@@ -9,8 +9,6 @@ import numpy as np
 class TrajectoryPlanning(Node):
     def __init__(self):
         super().__init__('traj_client')
-
-
     
     def plan_cartesian_trajectory(self):
         
@@ -119,26 +117,6 @@ class TrajectoryPlanning(Node):
         plt.tight_layout()
         plt.show()
 
-
-        # # set a fixed rotation for the end effector
-        # R = Rotation.from_matrix([
-        #     [0, 0, 1],
-        #     [0, 1, 0],
-        #     [-1, 0, 0]
-        # ]).as_matrix()
-
-        # # for each pair of viapoints, calculate the joint states using IK
-        # qs = []
-        # for i in range(len(viapoints) - 1):
-        #     q = compute_ik(viapoints[i], R, elbow_up=True)
-        #     if q is not None:
-        #         qs.append(q)
-
-        # # for each joint, plot the trajectory with waypoints and via points
-        # for i in range(6):
-        #     plt.plot([q[i] for q in qs], label='joint' + str(i + 1))
-        # plt.legend()
-        # plt.show()   
 
     # Linear Segments with Parabolic Blends
     # Computes the lspb along one dimention (X, Y or Z)
