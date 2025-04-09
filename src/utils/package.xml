@@ -3,24 +3,14 @@
 <package format="3">
   <name>utils</name>
   <version>0.0.0</version>
-  <description>Utils for RBT1001</description>
+  <description>TODO: Package description</description>
+  <maintainer email="francescodelduchetto@gmail.com">lcas</maintainer>
+  <license>TODO: License declaration</license>
 
-  <maintainer email="fdelduchetto@lincoln.ac.uk">Francesco Del Duchetto</maintainer>
-
-  <author email="fdelduchetto@lincoln.ac.uk">Francesco Del Duchetto</author>
-
-  <license>Apache-2.0</license>
-
-  <buildtool_depend>ament_cmake</buildtool_depend>
-
-
-  <exec_depend>joint_state_broadcaster</exec_depend>
-  <exec_depend>joint_state_publisher_gui</exec_depend>
-  <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>robots_description</exec_depend>
-  <exec_depend>ros2launch</exec_depend>
-  <exec_depend>rviz2</exec_depend>
-  <exec_depend>xacro</exec_depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
 
   <export>
     <build_type>ament_python</build_type>
