@@ -29,7 +29,9 @@ RUN . /opt/ros/humble/setup.sh && \
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt upgrade -y && \
     apt install -y \
-    ros-humble-tf-transformations
+    ros-humble-tf-transformations \
+    ros-humble-urdf-launch \
+    ros-humble-xacro
 # RUN DEBIAN_FRONTEND=noninteractive apt update && \
 #     apt upgrade -y && \
 #     apt install -y && \

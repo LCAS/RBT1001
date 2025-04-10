@@ -17,3 +17,4 @@ moveit_simple_controller_manager:
       - joint4_to_joint3
       - joint5_to_joint4
       - joint6_to_joint5
+    allow_partial_joints_goal: true
