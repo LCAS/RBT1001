@@ -50,7 +50,7 @@ def generate_launch_description():
     # ros_gz_bridge_config_file_path = 'config/ros_gz_bridge.yaml'
 
     # Set the path to different files and folders
-    pkg_ros_gz_sim = FindPackageShare(package='ros_gz_sim').find('ros_gz_sim')
+    pkg_ros_gz_sim = FindPackageShare(package='ros_ign_gazebo').find('ros_ign_gazebo')
     pkg_share_gazebo = FindPackageShare(package=package_name_gazebo).find(package_name_gazebo)
     pkg_share_description = FindPackageShare(
         package=package_name_description).find(package_name_description)
@@ -197,12 +197,12 @@ def generate_launch_description():
     # Start Gazebo
     start_gazebo_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
-        launch_arguments=[('gz_args', [' -r -v 4 ', world_path])])
+            os.path.join(pkg_ros_gz_sim, 'launch', 'ign_gazebo.launch.py')),
+        launch_arguments=[('ign_args', [' -r -v 4 ', world_path])])
 
     # Bridge ROS topics and Gazebo messages for establishing communication
     start_gazebo_ros_bridge_cmd = Node(
-        package='ros_gz_bridge',
+        package='ros_ign_bridge',
         executable='parameter_bridge',
         # parameters=[{
         #     'config_file': default_ros_gz_bridge_config_file_path,
@@ -226,7 +226,7 @@ def generate_launch_description():
 
     # Spawn the robot
     start_gazebo_ros_spawner_cmd = Node(
-        package='ros_gz_sim',
+        package='ros_ign_gazebo',
         executable='create',
         output='screen',
         arguments=[

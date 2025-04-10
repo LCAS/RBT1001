@@ -20,7 +20,7 @@
             use_gazebo="true"/> -->
 
     <xacro:firefighter_ros2_control 
-            name="FakeSystem"
+            name="$(arg robot_name)"
             use_gazebo="$(arg use_gazebo)"/>
 
     <xacro:include filename="$(find mecharm_moveit_config)/config/gazebo_sim_ros2_control.urdf.xacro" />
