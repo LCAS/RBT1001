@@ -119,7 +119,7 @@ def generate_launch_description():
 
     declare_use_rviz_cmd = DeclareLaunchArgument(
         name='use_rviz',
-        default_value='true',
+        default_value='false',
         description='Flag to enable RViz')
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(

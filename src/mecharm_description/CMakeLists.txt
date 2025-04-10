@@ -5,4 +5,4 @@ find_package(ament_cmake REQUIRED)
 
 ament_package()
 
-install(DIRECTORY urdf launch DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY urdf launch mesh DESTINATION share/${PROJECT_NAME})

@@ -33,7 +33,7 @@ def generate_launch_description():
     # Start arm controller
     start_arm_controller_cmd = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'arm_controller'],
+             'mecharm_controller'],
         output='screen')
 
     # Start gripper action controller

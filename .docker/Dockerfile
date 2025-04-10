@@ -31,7 +31,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
     ros-humble-tf-transformations \
     ros-humble-urdf-launch \
-    ros-humble-xacro
+    ros-humble-xacro \
+    ros-humble-ign-ros2-control \
+    ros-humble-ign-ros2-control-demos
 # RUN DEBIAN_FRONTEND=noninteractive apt update && \
 #     apt upgrade -y && \
 #     apt install -y && \

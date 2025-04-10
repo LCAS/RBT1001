@@ -1,14 +1,31 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
-    <xacro:arg name="initial_positions_file" default="$(find mecharm_moveit_config)/config/initial_positions.yaml" />
+    <xacro:arg name="robot_name" default="firefighter"/>
+    <xacro:arg name="use_gazebo" default="true"/>
+    <!-- <xacro:arg name="initial_positions_file" default="$(find mecharm_moveit_config)/config/initial_positions.yaml" /> -->
 
     <!-- Import firefighter urdf file -->
-    <xacro:include filename="$(find mycobot_description)/urdf/mecharm_270_m5/mecharm_270_m5.urdf" />
+    <xacro:include filename="$(find mecharm_description)/urdf/mecharm_270_m5.urdf" />
+    <xacro:mecharm>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:mecharm>
 
     <!-- Import control_xacro -->
     <xacro:include filename="$(find mecharm_moveit_config)/config/firefighter.ros2_control.xacro" />
 
 
-    <xacro:firefighter_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+    <!-- <xacro:firefighter_ros2_control 
+            name="FakeSystem" 
+            initial_positions_file="$(arg initial_positions_file)"
+            use_gazebo="true"/> -->
+
+    <xacro:firefighter_ros2_control 
+            name="FakeSystem"
+            use_gazebo="$(arg use_gazebo)"/>
+
+    <xacro:include filename="$(find mecharm_moveit_config)/config/gazebo_sim_ros2_control.urdf.xacro" />
+    <xacro:load_gazebo_sim_ros2_control_plugin
+      robot_name="$(arg robot_name)"
+      use_gazebo="$(arg use_gazebo)"/>
 
 </robot>

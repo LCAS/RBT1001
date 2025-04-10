@@ -162,16 +162,16 @@ def generate_launch_description():
     # TODO fix
     robot_description_content = ParameterValue(Command([
         'xacro', ' ', urdf_model, ' ',
-        'robot_name:=', LaunchConfiguration('robot_name'), ' ',
-        'prefix:=', LaunchConfiguration('prefix'), ' ',
-        'add_world:=', LaunchConfiguration('add_world'), ' ',
-        'base_link:=', LaunchConfiguration('base_link'), ' ',
-        'base_type:=', LaunchConfiguration('base_type'), ' ',
-        'flange_link:=', LaunchConfiguration('flange_link'), ' ',
-        'gripper_type:=', LaunchConfiguration('gripper_type'), ' ',
-        'use_camera:=', LaunchConfiguration('use_camera'), ' ',
-        'use_gazebo:=', LaunchConfiguration('use_gazebo'), ' ',
-        'use_gripper:=', LaunchConfiguration('use_gripper')
+        'robot_name:=', LaunchConfiguration('robot_name')#, ' ',
+        # 'prefix:=', LaunchConfiguration('prefix'), ' ',
+        # 'add_world:=', LaunchConfiguration('add_world'), ' ',
+        # 'base_link:=', LaunchConfiguration('base_link'), ' ',
+        # 'base_type:=', LaunchConfiguration('base_type'), ' ',
+        # 'flange_link:=', LaunchConfiguration('flange_link'), ' ',
+        # 'gripper_type:=', LaunchConfiguration('gripper_type'), ' ',
+        # 'use_camera:=', LaunchConfiguration('use_camera'), ' ',
+        # 'use_gazebo:=', LaunchConfiguration('use_gazebo'), ' ',
+        # 'use_gripper:=', LaunchConfiguration('use_gripper')
     ]), value_type=str)
 
     # Subscribe to the joint states of the robot, and publish the 3D pose of each link.
@@ -206,7 +206,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         output='screen',
-        arguments=['-d', rviz_config_file],
+        # arguments=['-d', rviz_config_file],
         parameters=[{'use_sim_time': use_sim_time}])
 
     # Create the launch description and populate

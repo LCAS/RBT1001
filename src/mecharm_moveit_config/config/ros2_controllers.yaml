@@ -21,6 +21,7 @@ mecharm_controller:
       - joint6_to_joint5
     command_interfaces:
       - position
+      - velocity
     state_interfaces:
       - position
       - velocity

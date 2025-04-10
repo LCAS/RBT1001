@@ -46,11 +46,11 @@
     </include>
 
     <!-- Include the cylinder model -->
-    <include>
+    <!-- <include>
       <uri>model://red_cylinder</uri>
       <name>red_cylinder</name>
       <pose>0.22 0.12 0.175 0 0 0</pose>
-    </include>
+    </include> -->
 
     <!-- Include the other objects -->
 
